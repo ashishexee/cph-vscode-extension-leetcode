@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+	  "target": "es6",
+	  "module": "commonjs",
+	  "lib": ["es6", "dom"],
+	  "strict": true,
+	  "esModuleInterop": true,
+	  "skipLibCheck": true,
+	  "outDir": "./out",
+	  "rootDir": "./src"
+	},
+	"exclude": ["node_modules", ".vscode-test"]
+  }
+  
