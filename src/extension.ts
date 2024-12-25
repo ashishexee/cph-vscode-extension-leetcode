@@ -60,11 +60,11 @@ export function activate(context: vscode.ExtensionContext) {
         'leetcode-test-case-manager.getSolutionFileDirectory',
         async () => {
             try {
-                const solutionPath = path.join(baseDirectory, 'solution.cpp'); // or solution.py
-                await vscode.env.clipboard.writeText(solutionPath);
-                vscode.window.showInformationMessage(`Solution file path copied to clipboard: ${solutionPath}`);
+                const solutionDir = path.join(baseDirectory, 'dist', 'test_cases');
+                await vscode.env.clipboard.writeText(solutionDir);
+                vscode.window.showInformationMessage(`Solution directory path copied to clipboard: ${solutionDir}`);
             } catch (error) {
-                vscode.window.showErrorMessage(`Error copying solution file path: ${error}`);
+                vscode.window.showErrorMessage(`Error copying solution directory path: ${error}`);
             }
         }
     );
