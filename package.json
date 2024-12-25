@@ -23,8 +23,11 @@
       {
         "command": "leetcode-cph-helper-by-ashish.writeSolutionFile",
         "title": "Write Solution File"
+      },
+      {
+        "command": "leetcode-test-case-manager.getSolutionFileDirectory",
+        "title": "Get Solution File Directory"
       }
-      
     ]
   },
   "scripts": {
