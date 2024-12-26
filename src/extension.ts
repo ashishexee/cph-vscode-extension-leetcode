@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { fetchTestCases } from './fetchTestCases';
 import { executeCode } from './executeCode';
+import { CommandTreeDataProvider } from './commandTreeDataProvider';
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('LeetCode Helper Extension Activated!');
@@ -19,7 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
         async () => {
             const url = await vscode.window.showInputBox({
                 prompt: 'Enter the LeetCode problem URL',
-                placeHolder: 'https://leetcode.com/problems/example-problem/',
+                placeHolder: 'https://leetcode.com/problems/example-problem/description',
             });
 
             if (!url) {
@@ -31,6 +32,14 @@ export function activate(context: vscode.ExtensionContext) {
                 { location: vscode.ProgressLocation.Notification, title: 'Fetching LeetCode Test Cases...' },
                 async () => {
                     try {
+                        // Delete only the input and output files fetched previously
+                        const files = fs.readdirSync(baseDirectory);
+                        files.forEach(file => {
+                            if ((file.startsWith('input_') || file.startsWith('output_')) && !file.includes('_user_')) {
+                                fs.unlinkSync(path.join(baseDirectory, file));
+                            }
+                        });
+
                         await fetchTestCases(url);
                         vscode.window.showInformationMessage('Test cases fetched successfully!');
                     } catch (error) {
@@ -48,7 +57,7 @@ export function activate(context: vscode.ExtensionContext) {
             try {
                 // Copy the directory path to the clipboard
                 await vscode.env.clipboard.writeText(baseDirectory);
-                vscode.window.showInformationMessage(`You can now paste the file location: ${baseDirectory}`);
+                vscode.window.showInformationMessage(`I/O text file directory path copied to clipboard: ${baseDirectory}`);
             } catch (error) {
                 vscode.window.showErrorMessage(`Error: ${error}`);
             }
@@ -107,8 +116,7 @@ export function activate(context: vscode.ExtensionContext) {
                 }
 
                 const boilerplate = language === 'python'
-                    ? `
-import os
+                    ? `import os
 
 def run_test_case(test_case_number, function):
     # Determine the base directory dynamically\n
@@ -144,9 +152,9 @@ def run_test_case(test_case_number, function):
 
 #run_test_case(ENTER THE TESTCASE NUMBER, ENTER THE FUNCTION NAME)\n
 # EXAMPLE:\n
-run_test_case()  # Replace with the relevant test case number and function name\n
+run_test_case()  # Replace with the relevant test case number and function name\n`
 
-`
+
                     : `#include <bits/stdc++.h>
 #include <filesystem>
 #include <functional>
@@ -278,6 +286,8 @@ int main() {
     return 0;
 }`;
 
+
+
                 fs.writeFileSync(filePath, boilerplate, 'utf-8');
 
                 const document = await vscode.workspace.openTextDocument(filePath);
@@ -285,8 +295,7 @@ int main() {
 
                 vscode.window.showInformationMessage(`Solution file '${path.basename(filePath)}' is ready in ${baseDirectory}.`);
             } catch (error) {
-                const errorMessage = error instanceof Error ? error.message : String(error);
-                vscode.window.showErrorMessage(`Error creating solution file: ${errorMessage}`);
+                vscode.window.showErrorMessage(`Error: ${error}`);
             }
         }
     );
@@ -352,28 +361,31 @@ int main() {
                             try {
                                 const output = await executeCode(filePath, language, testCaseNumber);
                                 const expectedOutputPath = path.join(baseDirectory, `output_${testCaseNumber}.txt`);
-                                let expectedOutput = fs.existsSync(expectedOutputPath) ? fs.readFileSync(expectedOutputPath, 'utf-8').trim() : 'N/A';
+                                let expectedOutput = fs.existsSync(expectedOutputPath) ? fs.readFileSync(expectedOutputPath, 'utf-8').trim() : null;
 
                                 // Remove quotes from the expected output if it is a string
-                                if (expectedOutput.startsWith('"') && expectedOutput.endsWith('"')) {
+                                if (expectedOutput && expectedOutput.startsWith('"') && expectedOutput.endsWith('"')) {
                                     expectedOutput = expectedOutput.slice(1, -1);
                                 }
 
                                 // Normalize the outputs for comparison
                                 const normalize = (str: string) => str.replace(/\s+/g, ' ').trim();
                                 const normalizedResult = normalize(output);
-                                const normalizedExpectedOutput = normalize(expectedOutput);
+                                const normalizedExpectedOutput = expectedOutput ? normalize(expectedOutput) : null;
 
-                                const resultMessage = normalizedResult === normalizedExpectedOutput
-                                    ? `✅🗿 Test Case ${testCaseNumber}: Passed! 🗿\n`
-                                    : `❌😭 Test Case ${testCaseNumber}: Failed! 😭\n`;
+                                const resultMessage = normalizedExpectedOutput
+                                    ? (normalizedResult === normalizedExpectedOutput
+                                        ? `✅🗿 Test Case ${testCaseNumber}: Passed! 🗿\n`
+                                        : `❌😭 Test Case ${testCaseNumber}: Failed! 😭\n`)
+                                    : `Output for Test Case ${testCaseNumber}: ${normalizedResult}`;
 
-                                results.push(`${resultMessage}Expected Output: ${normalizedExpectedOutput}\nActual Output: ${normalizedResult}`);
+                                results.push(expectedOutput
+                                    ? `${resultMessage}Expected Output: ${normalizedExpectedOutput}\nActual Output: ${normalizedResult}`
+                                    : resultMessage);
                             } catch (innerError) {
                                 const errorMessage = innerError instanceof Error ? innerError.message : String(innerError);
-                                const expectedOutputPath = path.join(baseDirectory, `output_${testCaseNumber}.txt`);
-                                const expectedOutput = fs.existsSync(expectedOutputPath) ? fs.readFileSync(expectedOutputPath, 'utf-8').trim() : 'N/A';
-                                results.push(`❌😭 Test Case ${testCaseNumber}: Failed! 😭 \nError: ${errorMessage}\nExpected Output: ${expectedOutput}\nActual Output: N/A`);
+                                const actualOutput = 'N/A';
+                                results.push(`❌😭 Test Case ${testCaseNumber}: Failed! 😭 \nError: ${errorMessage}\nActual Output: ${actualOutput}`);
                             }
 
                             const summary = results.join('\n\n');
@@ -392,6 +404,11 @@ int main() {
 
     // Register commands in context
     context.subscriptions.push(fetchCommand, getIOFileDirectoryCommand, getSolutionFileDirectoryCommand, writeSolutionFileCommand, runCommand);
+    const commandTreeDataProvider = new CommandTreeDataProvider();
+    vscode.window.registerTreeDataProvider('leetcodeHelperCommands', commandTreeDataProvider);
+
+    // Open the LeetCode Helper: Commands view automatically
+    vscode.commands.executeCommand('workbench.view.extension.leetcodeHelper');
 }
 
 export function deactivate() {
