@@ -44,5 +44,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - updated the package.json file for proper functioning of Leetcode Helper:Command pannel(also added the icon)
 
-### Removed
-- Disabled Puppeteer visible mode (debug feature)
+### Fixed
+- updated the logic for fetching test cases
