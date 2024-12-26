@@ -27,6 +27,10 @@
       {
         "command": "leetcode-test-case-manager.getSolutionFileDirectory",
         "title": "Get Solution File Directory"
+      },
+      {
+        "command": "leetcode-cph-helper-by-ashish.getIOFileDirectory",
+        "title": "Get IO File Directory"
       }
     ],
     "views": {
