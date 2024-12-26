@@ -186,22 +186,19 @@ function saveTestCasesToFiles(testCases: any[]): void {
 }
 
 function extractRawData(input: string): string {
-    if (input.includes("target")) {
-        const [numsPart, targetPart] = input.split(", target = ");
-        const nums = numsPart.split("=")[1].trim(); // Extract the part after `nums =`
-        const target = targetPart.trim(); // Extract the target
-        return `${nums}\n${target}`; // Return both as separate lines
-    }
+    // Regular expression to match "variable_name = value"
+    const regex = /[a-zA-Z_]\w*\s*=\s*(\[.*?\]|{.*?}|".*?"|'.*?'|[^,\s]+)/g;
 
-    const regex = /=(.+)/; // Matches the `=` sign and everything after it
-    const match = input.match(regex);
+    // Match all occurrences of the pattern in the input string
+    const matches = [...input.matchAll(regex)];
 
-    if (match && match[1]) {
-        return match[1].trim(); // Return everything after the `=` sign, trimmed of whitespace
-    }
+    // Extract only the values from the matches
+    const values = matches.map(match => match[0].split('=')[1].trim());
 
-    return input.trim(); // Return the trimmed input if no match is found
+    // Return the values joined by a space
+    return values.join(' ');
 }
+
 
 async function addAdditionalTestCases(count: number, existingCount: number): Promise<void> {
     const baseDirectory = path.join(__dirname, 'test_cases');
