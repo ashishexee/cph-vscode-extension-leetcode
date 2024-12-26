@@ -59,11 +59,6 @@ export async function executeCode(fileName: string, language: string, testCaseIn
             return;
         }
 
-        if (!fs.existsSync(resolvedOutputPath)) {
-            reject(`Error: output_${testCaseIndex}.txt does not exist!`);
-            return;
-        }
-
         let command: string;
         if (language === 'python') {
             const env = { ...process.env, LEETCODE_INPUT_FILE: resolvedInputPath };
@@ -84,7 +79,12 @@ export async function executeCode(fileName: string, language: string, testCaseIn
                     if (runError) {
                         reject(`Runtime error: ${runStderr || runStdout}`);
                     } else {
-                        compareOutputs(resolvedOutputPath, runStdout, testCaseIndex, resolve, reject);
+                        if (fs.existsSync(resolvedOutputPath)) {
+                            compareOutputs(resolvedOutputPath, runStdout, testCaseIndex, resolve, reject);
+                        } else {
+                            console.log(`Output for Test Case ${testCaseIndex}:\n${runStdout.trim()}`);
+                            resolve(runStdout.trim());
+                        }
                     }
                 });
             });
@@ -98,7 +98,12 @@ export async function executeCode(fileName: string, language: string, testCaseIn
             if (error) {
                 reject(`Error: ${stderr || stdout}`);
             } else {
-                compareOutputs(resolvedOutputPath, stdout, testCaseIndex, resolve, reject);
+                if (fs.existsSync(resolvedOutputPath)) {
+                    compareOutputs(resolvedOutputPath, stdout, testCaseIndex, resolve, reject);
+                } else {
+                    console.log(`Output for Test Case ${testCaseIndex}:\n${stdout.trim()}`);
+                    resolve(stdout.trim());
+                }
             }
         });
     });
@@ -141,23 +146,27 @@ async function main() {
 
             // Read the expected output
             const expectedOutputPath = path.join(testCasesDir, `output_${testCaseIndex}.txt`);
-            let expectedOutput = fs.existsSync(expectedOutputPath) ? fs.readFileSync(expectedOutputPath, 'utf-8').trim() : 'N/A';
+            if (fs.existsSync(expectedOutputPath)) {
+                let expectedOutput = fs.readFileSync(expectedOutputPath, 'utf-8').trim();
 
-            // Remove quotes from the expected output if it is a string
-            if (expectedOutput.startsWith('"') && expectedOutput.endsWith('"')) {
-                expectedOutput = expectedOutput.slice(1, -1);
+                // Remove quotes from the expected output if it is a string
+                if (expectedOutput.startsWith('"') && expectedOutput.endsWith('"')) {
+                    expectedOutput = expectedOutput.slice(1, -1);
+                }
+
+                // Normalize the outputs for comparison
+                const normalize = (str: string) => str.replace(/\s+/g, '').toLowerCase();
+                const normalizedResult = normalize(result);
+                const normalizedExpectedOutput = normalize(expectedOutput);
+
+                const resultMessage = normalizedResult === normalizedExpectedOutput
+                    ? `✅ Test Case ${testCaseIndex}: Passed!\n`
+                    : `❌ Test Case ${testCaseIndex}: Failed!\n`;
+
+                console.log(`${resultMessage}Expected Output: ${expectedOutput}\nActual Output: ${result.trim()}`);
+            } else {
+                console.log(`Output for Test Case ${testCaseIndex}:\n${result.trim()}`);
             }
-
-            // Normalize the outputs for comparison
-            const normalize = (str: string) => str.replace(/\s+/g, '').toLowerCase();
-            const normalizedResult = normalize(result);
-            const normalizedExpectedOutput = normalize(expectedOutput);
-
-            const resultMessage = normalizedResult === normalizedExpectedOutput
-                ? `✅ Test Case ${testCaseIndex}: Passed!\n`
-                : `❌ Test Case ${testCaseIndex}: Failed!\n`;
-
-            console.log(`${resultMessage}Expected Output: ${expectedOutput}\nActual Output: ${result.trim()}`);
         } catch (error) {
             console.error(error);
         }
