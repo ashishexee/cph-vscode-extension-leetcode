@@ -1,8 +1,9 @@
 import * as puppeteer from 'puppeteer';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as vscode from 'vscode';
 
-const RETRY_DELAY = 100; // 7 seconds
+const RETRY_DELAY = 100; // 0.1 seconds
 const MAX_RETRIES = 5; // Maximum retry attempts
 
 export async function fetchTestCases(url: string): Promise<void> {
@@ -53,14 +54,34 @@ export async function fetchTestCases(url: string): Promise<void> {
         }
     }
 
+    await browser.close();
+
     // If we fetched test cases, save them
     if (testCases.length > 0) {
         saveTestCasesToFiles(testCases);
+
+        // Prompt the user for additional test cases
+        const addMore = await vscode.window.showQuickPick(['Yes', 'No'], {
+            placeHolder: 'Do you want to add more test cases?'
+        });
+
+        if (addMore === 'Yes') {
+            const additionalCount = await vscode.window.showInputBox({
+                prompt: 'How many additional test cases do you want to add?',
+                validateInput: (value) => {
+                    const num = parseInt(value, 10);
+                    return isNaN(num) || num < 1 ? 'Please enter a valid number greater than 0' : null;
+                }
+            });
+
+            if (additionalCount) {
+                const count = parseInt(additionalCount, 10);
+                await addAdditionalTestCases(count, testCases.length);
+            }
+        }
     } else {
         console.log('Failed to fetch test cases after maximum retries.');
     }
-
-    await browser.close();
 }
 
 async function fetchTestCasesWithRetry(page: puppeteer.Page, url: string): Promise<any[]> {
@@ -150,6 +171,7 @@ function saveTestCasesToFiles(testCases: any[]): void {
         // Process and save the input
         const inputContent = extractRawData(testCase.input);
         fs.writeFileSync(inputFile, inputContent);
+        console.log(`Input test case ${index + 1} saved at ${inputFile}`);
 
         // Remove quotes from the output if it is a string
         let outputContent = testCase.output;
@@ -157,7 +179,7 @@ function saveTestCasesToFiles(testCases: any[]): void {
             outputContent = outputContent.slice(1, -1);
         }
         fs.writeFileSync(outputFile, outputContent);
-        console.log(`Output test case ${index + 1} saved.`);
+        console.log(`Output test case ${index + 1} saved at ${outputFile}`);
     });
 
     console.log(`Test cases saved successfully to ${testCasesDir}`);
@@ -179,6 +201,22 @@ function extractRawData(input: string): string {
     }
 
     return input.trim(); // Return the trimmed input if no match is found
+}
+
+async function addAdditionalTestCases(count: number, existingCount: number): Promise<void> {
+    const baseDirectory = path.join(__dirname, 'test_cases');
+
+    for (let i = 0; i < count; i++) {
+        const input = await vscode.window.showInputBox({
+            prompt: `Enter input for additional test case ${i + 1}`
+        });
+
+        if (input) {
+            const inputFile = path.join(baseDirectory, `input_${existingCount + i + 1}.txt`);
+            fs.writeFileSync(inputFile, input);
+            console.log(`Additional input test case ${existingCount + i + 1} saved at ${inputFile}`);
+        }
+    }
 }
 
 // Example usage of saveTestCasesToFiles function
