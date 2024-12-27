@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ----------------------------------------------------------------------------------------------------------
 
-## modifications #2
+## Modifications #2
 
 ### Added
 - Added Leetcode helper:Command in commandTreeDataProvider.ts file to view all the command directly from the pannel(manually seleting the command from command palette feature is also available by ctrl+shift+P)
@@ -46,3 +46,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - updated the logic for fetching test cases
+
+----------------------------------------------------------------------------------------------------------
+
+## Modifications #3
+
+### Added
+- added a new command show leetcode problems where links of every question on leetcode is availabe you can run this command and a text file will get opened and you can use (ctrl+f) to search for the specific leetcode question
+
+### Changed 
+- updated extension.ts to ensure proper execution of showleetcodeproblem command
+- updated commandTreeDataProvider.ts to add a new command to the panel
+- updated package.json file too

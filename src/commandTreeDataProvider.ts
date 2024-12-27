@@ -11,7 +11,8 @@ export class CommandTreeDataProvider implements vscode.TreeDataProvider<vscode.T
         'leetcode-cph-helper-by-ashish.runTestCases': '👉🏻 Run Test Cases',
         'leetcode-cph-helper-by-ashish.writeSolutionFile': '👉🏻 Write Solution File',
         'leetcode-test-case-manager.getSolutionFileDirectory': '👉🏻 Get Solution File Directory',
-        'leetcode-cph-helper-by-ashish.getIOFileDirectory': '👉🏻 Get I/O File Directory'
+        'leetcode-cph-helper-by-ashish.getIOFileDirectory': '👉🏻 Get I/O File Directory',
+        'leetcode-cph-helper-by-ashish.showLeetCodeProblemLinks': '👉🏻Show LeetCode Problem Links '
     };
 
     // Returns a TreeItem representation of the given element

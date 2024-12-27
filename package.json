@@ -31,7 +31,11 @@
       {
         "command": "leetcode-cph-helper-by-ashish.getIOFileDirectory",
         "title": "Get IO File Directory"
-      }
+      },
+      {
+        "command": "leetcode-cph-helper-by-ashish.showLeetCodeProblemLinks",
+        "title": "Show LeetCode Problem Links"
+    }
     ],
     "views": {
       "explorer": [
