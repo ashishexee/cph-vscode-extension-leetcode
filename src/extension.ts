@@ -402,8 +402,19 @@ int main() {
         }
     );
 
+    // Command: Show LeetCode Problem Links
+    const showLeetCodeProblemLinksCommand = vscode.commands.registerCommand(
+        'leetcode-cph-helper-by-ashish.showLeetCodeProblemLinks',
+        async () => {
+            const problemLinksFilePath = path.join(context.extensionPath, 'leetcode_problems_link.txt');
+            // Open the file in the editor
+            const document = await vscode.workspace.openTextDocument(problemLinksFilePath);
+            await vscode.window.showTextDocument(document);
+        }
+    );
+
     // Register commands in context
-    context.subscriptions.push(fetchCommand, getIOFileDirectoryCommand, getSolutionFileDirectoryCommand, writeSolutionFileCommand, runCommand);
+    context.subscriptions.push(fetchCommand,showLeetCodeProblemLinksCommand, getIOFileDirectoryCommand, getSolutionFileDirectoryCommand, writeSolutionFileCommand, runCommand);
     const commandTreeDataProvider = new CommandTreeDataProvider();
     vscode.window.registerTreeDataProvider('leetcodeHelperCommands', commandTreeDataProvider);
 
