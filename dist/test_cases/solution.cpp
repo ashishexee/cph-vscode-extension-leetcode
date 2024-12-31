@@ -96,13 +96,14 @@ void run_test_case(int test_case_number, const function<void(const T&)>& solutio
 // -------------------- SOLUTION TEMPLATE --------------------
 // MODIFY THIS SECTION FOR YOUR SPECIFIC PROBLEM
 
-void solution(const vector<string>& args) {
+void solution(const vector<int>& args) {
     // Example parsing different types of inputs
     // Modify according to your problem requirements
     
     // For array input: [1,2,3]
     if (!args.empty() && args[0][0] == '[') {
         auto arr = parseArray<int>(args[0]);
+        
     }
     
     // For string input: "hello"
@@ -113,7 +114,6 @@ void solution(const vector<string>& args) {
     // For integer input: 42
     if (args.size() >= 3) {
         int num = parseValue<int>(args[2]);
-        cout << "Input Integer: " << num << endl;
     }
     
     // YOUR SOLUTION LOGIC GOES HERE
@@ -123,8 +123,8 @@ void solution(const vector<string>& args) {
 
 int main() {
     // Run single test case
-    run_test_case<int>(1, solutionInt);                    // For integer input
-    run_test_case<string>(2, solutionString);              // For string input
-    run_test_case<vector<int>>(3, solutionVectorInt);      // For array input
+    run_test_case<vector<int>>(1, solution);
+    
+   
     return 0;
 }

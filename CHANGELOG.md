@@ -53,8 +53,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - added a new command show leetcode problems where links of every question on leetcode is availabe you can run this command and a text file will get opened and you can use (ctrl+f) to search for the specific leetcode question
+- added test_runner.py just 
+
 
 ### Changed 
 - updated extension.ts to ensure proper execution of showleetcodeproblem command
 - updated commandTreeDataProvider.ts to add a new command to the panel
 - updated package.json file too
+- updated the logic for fetchTestCases.ts (basically adding logic for second selector to account for every question on leetcode)

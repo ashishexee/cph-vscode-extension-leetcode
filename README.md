@@ -1,6 +1,6 @@
 # LeetCode Helper Extension
 
-![LeetCode Helper](resources/leetcode_helper_banner.png)
+![LeetCode Helper]
 
 ## Overview
 
@@ -13,7 +13,7 @@ LeetCode Helper is a Visual Studio Code extension designed to streamline the pro
 - **Solution File Management**: Automatically generate and manage solution files.
 - **Error Handling**: Detailed error messages to help you debug your code.
 
-![Features](resources/features.png)
+![Features]
 
 ## Installation
 
@@ -29,7 +29,7 @@ LeetCode Helper is a Visual Studio Code extension designed to streamline the pro
 3. Write your solution in the generated file.
 4. Run your test cases using `LeetCode Helper: Run Test Cases`.
 
-![Usage](resources/usage.png)
+![Usage]
 
 ## Extension Settings
 
@@ -45,18 +45,10 @@ This extension contributes the following settings:
 
 ## Release Notes
 
-### 1.0.1
-
-- Fixed issue with capturing actual output in failed test cases.
-- Improved error handling and logging.
-
 ### 1.0.0
 
 - Initial release of LeetCode Helper.
 
-## Contributing
-
-Contributions are welcome! Please read the [contributing guidelines](CONTRIBUTING.md) first.
 
 ## License
 
@@ -69,4 +61,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Logging**: Enhanced logging for better debugging.
 - **Solution File Management**: Automatically generate and manage solution files.
 
-![Footer](resources/footer.png)
+![Footer]

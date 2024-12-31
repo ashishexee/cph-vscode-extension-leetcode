@@ -5,14 +5,14 @@ export class CommandTreeDataProvider implements vscode.TreeDataProvider<vscode.T
     private _onDidChangeTreeData: vscode.EventEmitter<vscode.TreeItem | undefined | void> = new vscode.EventEmitter<vscode.TreeItem | undefined | void>();
     readonly onDidChangeTreeData: vscode.Event<vscode.TreeItem | undefined | void> = this._onDidChangeTreeData.event;
 
-    // Mapping of command IDs to their display names
-    private extensionCommands: { [key: string]: string } = {
-        'leetcode-cph-helper-by-ashish.fetchLeetCodeTestCases': '👉🏻 Fetch Test Cases',
-        'leetcode-cph-helper-by-ashish.runTestCases': '👉🏻 Run Test Cases',
-        'leetcode-cph-helper-by-ashish.writeSolutionFile': '👉🏻 Write Solution File',
-        'leetcode-test-case-manager.getSolutionFileDirectory': '👉🏻 Get Solution File Directory',
-        'leetcode-cph-helper-by-ashish.getIOFileDirectory': '👉🏻 Get I/O File Directory',
-        'leetcode-cph-helper-by-ashish.showLeetCodeProblemLinks': '👉🏻Show LeetCode Problem Links '
+    // Mapping of command IDs to their display names, icons, and colors
+    private extensionCommands: { [key: string]: { label: string, icon: string, color: string } } = {
+        'leetcode-cph-helper-by-ashish.fetchLeetCodeTestCases': { label: 'Fetch Test Cases', icon: 'cloud-download', color: 'charts.green' },
+        'leetcode-cph-helper-by-ashish.runTestCases': { label: 'Run Test Cases', icon: 'play-circle', color: 'charts.blue' },
+        'leetcode-cph-helper-by-ashish.writeSolutionFile': { label: 'Write Solution File', icon: 'file-code', color: 'charts.yellow' },
+        'leetcode-test-case-manager.getSolutionFileDirectory': { label: 'Get Solution File Directory', icon: 'folder', color: 'charts.orange' },
+        'leetcode-cph-helper-by-ashish.getIOFileDirectory': { label: 'Get I/O File Directory', icon: 'folder', color: 'charts.red' },
+        'leetcode-cph-helper-by-ashish.showLeetCodeProblemLinks': { label: 'Show LeetCode Problem Links', icon: 'link', color: 'charts.purple' }
     };
 
     // Returns a TreeItem representation of the given element
@@ -31,7 +31,11 @@ export class CommandTreeDataProvider implements vscode.TreeDataProvider<vscode.T
             return commands.then(cmds => 
                 cmds
                     .filter(cmd => Object.keys(this.extensionCommands).includes(cmd))
-                    .map(cmd => new CommandTreeItem(cmd, this.extensionCommands[cmd]))
+                    .map(cmd => {
+                        const commandInfo = this.extensionCommands[cmd];
+                        const treeItem = new CommandTreeItem(cmd, commandInfo.label, commandInfo.icon, commandInfo.color);
+                        return treeItem;
+                    })
             );
         }
     }
@@ -44,11 +48,19 @@ export class CommandTreeDataProvider implements vscode.TreeDataProvider<vscode.T
 
 // TreeItem implementation for representing individual commands in the tree view
 class CommandTreeItem extends vscode.TreeItem {
-    constructor(public readonly commandId: string, public readonly label: string) {
+    constructor(
+        public readonly commandId: string,
+        public readonly label: string,
+        public readonly icon: string,
+        public readonly color: string
+    ) {
         super(label, vscode.TreeItemCollapsibleState.None);
+        this.tooltip = this.label;
+        this.iconPath = new vscode.ThemeIcon(this.icon);
         this.command = {
             command: commandId,
             title: '',
         };
+        this.resourceUri = vscode.Uri.parse(`color:${this.color}`);
     }
 }
