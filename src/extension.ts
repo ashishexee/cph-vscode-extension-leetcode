@@ -116,43 +116,14 @@ export function activate(context: vscode.ExtensionContext) {
                 }
 
                 const boilerplate = language === 'python'
-                    ? `import os
+                    ? `import os; run_test_case=lambda n,f: print((lambda p: (lambda a: f(*a))(eval(l.strip()) for l in open(p).read().strip().splitlines()) if os.path.isfile(p) else f"Error: File not found at {p}. Check the file path and try again.")((lambda d: os.path.join(d, 'test_cases', f"input_{n}.txt"))(os.path.dirname(os.path.dirname(file)))))
+#WRITE YOUR CODE LOGIC HERE
 
-def run_test_case(test_case_number, function):
-    # Determine the base directory dynamically\n
-    base_directory = os.path.dirname(os.path.dirname(__file__))\n
-    file_path = os.path.join(base_directory, 'test_cases', f"input_{test_case_number}.txt")\n
-
-    try:\n
-        # Read the input file\n
-        with open(file_path, "r") as file:\n
-            content = file.read().strip().splitlines()  # Read file and split lines\n
-
-        # Dynamically parse all lines as arguments\n
-        args = [eval(line.strip()) for line in content]  # Parse each line in the file\n
-
-        # Call the provided function with all parsed arguments\n
-        result = function(*args)  # Unpack the arguments dynamically\n
-        print(result)  # Output the result\n
-
-    except FileNotFoundError:\n
-        print(f"Error: File not found at {file_path}. Check the file path and try again.")\n
-    except ValueError as e:\n
-        print(f"Error: {e}")\n
-    except SyntaxError as e:\n
-        print(f"Error: Check your input file format. {e}")\n
-    except Exception as e:\n
-        print(f"Unexpected Error: {e}")\n
-
-
-# WRITE YOUR FUNCTION HERE 
-#-------------------------------------------------------------------------------\n
-
-#-------------------------------------------------------------------------------\n
-
-#run_test_case(ENTER THE TESTCASE NUMBER, ENTER THE FUNCTION NAME)\n
-# EXAMPLE:\n
-run_test_case()  # Replace with the relevant test case number and function name\n`
+#---------------------------------------------------------------------------------------
+# Example usage
+# Provide the test case number and function name
+#run_test_case(TEST_CASE_NUMBER, FUNCTION_NAME);
+run_test_case()`
 
 
                     : `#include <bits/stdc++.h>

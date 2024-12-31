@@ -3,7 +3,12 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
 
-const RETRY_DELAY = 100; // 0.1 seconds
+interface TestCase {
+    input: string | null;
+    output: string | null;
+}
+
+const RETRY_DELAY = 3000; // 0.1 seconds
 const MAX_RETRIES = 5; // Maximum retry attempts
 
 export async function fetchTestCases(url: string): Promise<void> {
@@ -11,7 +16,7 @@ export async function fetchTestCases(url: string): Promise<void> {
     const page = await browser.newPage();
 
     let attempts = 0;
-    let testCases = [];
+    let testCases: TestCase[] = [];
 
     const baseDirectory = path.join(__dirname, 'dist', 'test_cases');
 
@@ -83,7 +88,6 @@ export async function fetchTestCases(url: string): Promise<void> {
         console.log('Failed to fetch test cases after maximum retries.');
     }
 }
-
 async function fetchTestCasesWithRetry(page: puppeteer.Page, url: string): Promise<any[]> {
     // Load cookies if available
     await loadCookies(page);
@@ -96,24 +100,50 @@ async function fetchTestCasesWithRetry(page: puppeteer.Page, url: string): Promi
     }
 
     console.log('Waiting for test cases to load...');
+    let testCases: TestCase[] = [];
     try {
         await page.waitForSelector('pre', { timeout: 20000 }); // Wait up to 20 seconds for the <pre> tags
+        // Extract test cases
+        testCases = await page.$$eval('pre', (elements) => {
+            return elements.map(pre => {
+                const inputMatch = pre.innerText.match(/Input:\s*(.+)/);
+                const outputMatch = pre.innerText.match(/Output:\s*(.+)/);
+                return {
+                    input: inputMatch ? inputMatch[1].trim() : null,
+                    output: outputMatch ? outputMatch[1].trim() : null,
+                };
+            });
+        });
     } catch (error) {
-        console.error('Failed to find <pre> tags in time:', error);
-        return []; // Return empty array if fetching fails
+        console.error('Failed to extract test cases using <pre> selector:', error);
     }
 
-    // Extract test cases
-    const testCases = await page.$$eval('pre', (elements) => {
-        return elements.map(pre => {
-            const inputMatch = pre.innerText.match(/Input:\s*(.+)/);
-            const outputMatch = pre.innerText.match(/Output:\s*(.+)/);
-            return {
-                input: inputMatch ? inputMatch[1].trim() : null,
-                output: outputMatch ? outputMatch[1].trim() : null,
-            };
-        });
-    });
+    if (testCases.length === 0) {
+        try {
+            // Fallback to the .example-block structure
+            console.log('Trying to extract test cases using .example-block structure...');
+            await page.waitForSelector('.example-block', { timeout: 5000 }); // Adjust timeout as needed
+            testCases = await page.$$eval('.example-block', (blocks) => {
+                return blocks.map(block => {
+                    const inputElement = block.querySelector('strong:contains("Input:") + span.example-io');
+                    const outputElement = block.querySelector('strong:contains("Output:") + span.example-io');
+
+                    return {
+                        input: inputElement ? (inputElement as HTMLElement).innerText.trim() : null,
+                        output: outputElement ? (outputElement as HTMLElement).innerText.trim() : null,
+                    };
+                });
+            });
+
+            if (testCases.length > 0) {
+                console.log('Test cases successfully extracted using .example-block structure.');
+            } else {
+                console.log('No test cases found using .example-block structure.');
+            }
+        } catch (error) {
+            console.error('Failed to extract test cases using .example-block structure:', error);
+        }
+    }
 
     return testCases;
 }
