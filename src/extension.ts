@@ -384,7 +384,7 @@ int main() {
         }
     );
 
-    // Register commands in context
+    // Register commands in context so that commandTreeDataProvider can access them
     context.subscriptions.push(fetchCommand,showLeetCodeProblemLinksCommand, getIOFileDirectoryCommand, getSolutionFileDirectoryCommand, writeSolutionFileCommand, runCommand);
     const commandTreeDataProvider = new CommandTreeDataProvider();
     vscode.window.registerTreeDataProvider('leetcodeHelperCommands', commandTreeDataProvider);

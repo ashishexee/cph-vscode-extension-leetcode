@@ -45,83 +45,40 @@ async function createCodeFile(): Promise<{ fileName: string; language: string }>
     return { fileName, language };
 }
 
-// Function to execute code for a specific test case
-export async function executeCode(fileName: string, language: string, testCaseIndex: number): Promise<string> {
-    return new Promise((resolve, reject) => {
-        const resolvedFilePath = path.resolve(__dirname, fileName);
-        const resolvedInputPath = path.join(__dirname, 'test_cases', `input_${testCaseIndex}.txt`);
-        const resolvedOutputPath = path.join(__dirname, 'test_cases', `output_${testCaseIndex}.txt`);
-
-        const options: ExecOptions = { cwd: path.dirname(resolvedFilePath) };
-
-        if (!fs.existsSync(resolvedInputPath)) {
-            reject(`Error: input_${testCaseIndex}.txt does not exist!`);
-            return;
-        }
-
-        let command: string;
-        if (language === 'python') {
-            const env = { ...process.env, LEETCODE_INPUT_FILE: resolvedInputPath };
-            command = `python "${resolvedFilePath}"`;
-            options.env = env;
-        } else if (language === 'cpp') {
-            const outputFileName = path.basename(resolvedFilePath, '.cpp');
-            const compileCommand = `g++ -std=c++17 -o "${outputFileName}" "${resolvedFilePath}"`;
-
-            exec(compileCommand, options, (compileError, stdout, stderr) => {
-                if (compileError) {
-                    reject(`Compilation error: ${stderr || stdout}`);
-                    return;
-                }
-
-                const runCommand = `./${outputFileName} < "${resolvedInputPath}"`;
-                exec(runCommand, options, (runError, runStdout, runStderr) => {
-                    if (runError) {
-                        reject(`Runtime error: ${runStderr || runStdout}`);
+// Function to check which Python version is available
+async function getPythonCommand(): Promise<string> {
+    return new Promise((resolve) => {
+        exec('python --version', (error) => {
+            if (!error) {
+                resolve('python');
+            } else {
+                exec('python3 --version', (error) => {
+                    if (!error) {
+                        resolve('python3');
                     } else {
-                        if (fs.existsSync(resolvedOutputPath)) {
-                            compareOutputs(resolvedOutputPath, runStdout, testCaseIndex, resolve, reject);
-                        } else {
-                            console.log(`Output for Test Case ${testCaseIndex}:\n${runStdout.trim()}`);
-                            resolve(runStdout.trim());
-                        }
+                        throw new Error('Python is not installed.');
                     }
                 });
-            });
-            return;
-        } else {
-            reject("Unsupported language");
-            return;
-        }
-
-        exec(command, options, (error, stdout, stderr) => {
-            if (error) {
-                reject(`Error: ${stderr || stdout}`);
-            } else {
-                if (fs.existsSync(resolvedOutputPath)) {
-                    compareOutputs(resolvedOutputPath, stdout, testCaseIndex, resolve, reject);
-                } else {
-                    console.log(`Output for Test Case ${testCaseIndex}:\n${stdout.trim()}`);
-                    resolve(stdout.trim());
-                }
             }
         });
     });
 }
 
-// Helper function to compare outputs
-function compareOutputs(expectedOutputPath: string, actualOutput: string, testCaseIndex: number, resolve: Function, reject: Function) {
-    const expectedOutput = fs.readFileSync(expectedOutputPath, 'utf-8').trim();
-    const normalizedExpected = normalizeOutput(expectedOutput);
-    const normalizedActual = normalizeOutput(actualOutput.trim());
+// Function to execute code for a specific test case
+export async function executeCode(fileName: string, language: string, testCaseIndex: number): Promise<string> {
+    const resolvedFilePath = path.resolve(fileName);
+    const pythonCommand = await getPythonCommand();
+    const command = language === 'python' ? `${pythonCommand} "${resolvedFilePath}"` : `./"${resolvedFilePath}"`;
 
-    if (normalizedExpected === normalizedActual) {
-        console.log(`Test case ${testCaseIndex} passed!`);
-        resolve(actualOutput.trim());
-    } else {
-        console.error(`Test case ${testCaseIndex} failed. Expected: ${expectedOutput}, Got: ${actualOutput.trim()}`);
-        reject(`Test case ${testCaseIndex} failed.`);
-    }
+    return new Promise((resolve, reject) => {
+        exec(command, (error, stdout, stderr) => {
+            if (error) {
+                reject(`Error: ${stderr}`);
+            } else {
+                resolve(stdout.trim());
+            }
+        });
+    });
 }
 
 // Main function
@@ -154,21 +111,19 @@ async function main() {
                     expectedOutput = expectedOutput.slice(1, -1);
                 }
 
-                // Normalize the outputs for comparison
-                const normalize = (str: string) => str.replace(/\s+/g, '').toLowerCase();
-                const normalizedResult = normalize(result);
-                const normalizedExpectedOutput = normalize(expectedOutput);
+                console.log(`Expected Output: ${expectedOutput}`);
+                console.log(`Actual Output: ${result}`);
 
-                const resultMessage = normalizedResult === normalizedExpectedOutput
-                    ? `✅ Test Case ${testCaseIndex}: Passed!\n`
-                    : `❌ Test Case ${testCaseIndex}: Failed!\n`;
-
-                console.log(`${resultMessage}Expected Output: ${expectedOutput}\nActual Output: ${result.trim()}`);
+                if (expectedOutput === result) {
+                    console.log('Test Case Passed');
+                } else {
+                    console.log('Test Case Failed');
+                }
             } else {
-                console.log(`Output for Test Case ${testCaseIndex}:\n${result.trim()}`);
+                console.log('Expected output file not found.');
             }
         } catch (error) {
-            console.error(error);
+            console.log(error);
         }
     }
 }

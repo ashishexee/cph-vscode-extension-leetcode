@@ -61,3 +61,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - updated commandTreeDataProvider.ts to add a new command to the panel
 - updated package.json file too
 - updated the logic for fetchTestCases.ts (basically adding logic for second selector to account for every question on leetcode)
+
+### Fixed
+- change python version to python3 (install python3 to execute the code)
