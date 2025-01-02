@@ -63,4 +63,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - updated the logic for fetchTestCases.ts (basically adding logic for second selector to account for every question on leetcode)
 
 ### Fixed
-- change python version to python3 (install python3 to execute the code)
+- modified executeCode.ts file such that before proceeding it check for the python version (either python or python3) that is installed in the machine
