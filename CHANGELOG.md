@@ -61,3 +61,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - updated commandTreeDataProvider.ts to add a new command to the panel
 - updated package.json file too
 - updated the logic for fetchTestCases.ts (basically adding logic for second selector to account for every question on leetcode)
+
+### Fixed
+- modified executeCode.ts file such that before proceeding it check for the python version (either python or python3) that is installed in the machine
+
+--------------------------------------------------------------------------------------------------------------
+### Modifications #4
+
+### Fixed
+- updated the logic for fetchTestCases as some leetcode problem page has input and output under <pre> class so we have to use <pre> as the selector for puppeteer on the other hand some leetcode problems(old problems) has input and output under div.example-block under <strong> tags so I have updated the logic of puppeteer to fetch test cases for all the problems in leetcode no matter new or old
+(this thing can change anytime if any time leetcode decided to change the class under which they write input and output)
+

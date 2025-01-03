@@ -62,7 +62,7 @@ export async function executeCode(fileName: string, language: string, testCaseIn
         let command: string;
         if (language === 'python') {
             const env = { ...process.env, LEETCODE_INPUT_FILE: resolvedInputPath };
-            command = `python "${resolvedFilePath}"`;
+            command = `python3 "${resolvedFilePath}"`;   //use python3 for proper functioning
             options.env = env;
         } else if (language === 'cpp') {
             const outputFileName = path.basename(resolvedFilePath, '.cpp');

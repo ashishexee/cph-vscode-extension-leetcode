@@ -88,6 +88,7 @@ export async function fetchTestCases(url: string): Promise<void> {
         console.log('Failed to fetch test cases after maximum retries.');
     }
 }
+
 async function fetchTestCasesWithRetry(page: puppeteer.Page, url: string): Promise<any[]> {
     // Load cookies if available
     await loadCookies(page);
@@ -122,15 +123,15 @@ async function fetchTestCasesWithRetry(page: puppeteer.Page, url: string): Promi
         try {
             // Fallback to the .example-block structure
             console.log('Trying to extract test cases using .example-block structure...');
-            await page.waitForSelector('.example-block', { timeout: 5000 }); // Adjust timeout as needed
-            testCases = await page.$$eval('.example-block', (blocks) => {
+            await page.waitForSelector('div.example-block', { timeout: 5000 }); // Adjust timeout as needed
+            testCases = await page.$$eval('div.example-block', (blocks) => {
                 return blocks.map(block => {
-                    const inputElement = block.querySelector('strong:contains("Input:") + span.example-io');
-                    const outputElement = block.querySelector('strong:contains("Output:") + span.example-io');
+                    const inputElement = Array.from(block.querySelectorAll('strong')).find(el => el.textContent?.includes("Input:"));
+                    const outputElement = Array.from(block.querySelectorAll('strong')).find(el => el.textContent?.includes("Output:"));
 
                     return {
-                        input: inputElement ? (inputElement as HTMLElement).innerText.trim() : null,
-                        output: outputElement ? (outputElement as HTMLElement).innerText.trim() : null,
+                        input: inputElement ? (inputElement.nextElementSibling as HTMLElement).innerText.trim() : null,
+                        output: outputElement ? (outputElement.nextElementSibling as HTMLElement).innerText.trim() : null,
                     };
                 });
             });
@@ -228,7 +229,6 @@ function extractRawData(input: string): string {
     // Return the values joined by a space
     return values.join(' ');
 }
-
 
 async function addAdditionalTestCases(count: number, existingCount: number): Promise<void> {
     const baseDirectory = path.join(__dirname, 'test_cases');

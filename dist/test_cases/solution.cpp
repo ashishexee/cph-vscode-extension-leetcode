@@ -1,130 +1,58 @@
-#include <bits/stdc++.h>
-#include <filesystem>
-#include <functional>
 #include <iostream>
+#include <fstream>
 #include <sstream>
-#include <string>
 #include <vector>
-
+#include <algorithm>
+#include <string>
 using namespace std;
-namespace fs = std::filesystem;
 
-// Parse values from string
-template <typename T>
-T parseValue(const string& str) {
-    istringstream iss(str);
-    T value;
-    iss >> value;
-    return value;
-}
+// Function to reverse words in a string
+string reverseWords(const string& s) {
+    istringstream iss(s);
+    vector<string> words;
+    string word;
 
-// Template specialization for string
-template <>
-string parseValue<string>(const string& str) {
-    // Remove quotes if present
-    if (str.size() >= 2 && str.front() == '"' && str.back() == '"') {
-        return str.substr(1, str.size() - 2);
+    // Split the input string into words
+    while (iss >> word) {
+        words.push_back(word);
     }
-    return str;
-}
 
-// Parse arrays from string
-template <typename T>
-vector<T> parseArray(const string& str) {
-    vector<T> result;
-    string trimmedStr = str.substr(1, str.size() - 2); // Remove brackets
-    istringstream iss(trimmedStr);
-    string item;
-    while (getline(iss, item, ',')) {
-        result.push_back(parseValue<T>(item));
-    }
-    return result;
-}
+    // Reverse the list of words
+    reverse(words.begin(), words.end());
 
-// Function to detect data type from string
-template <typename T>
-T detectAndParseValue(const string& str) {
-    if (str.empty()) {
-        throw runtime_error("Empty input string");
-    }
-    
-    // Check if it's an array
-    if (str.front() == '[' && str.back() == ']') {
-        return parseArray<typename T::value_type>(str);
-    }
-    
-    // Check if it's a string (quoted)
-    if (str.front() == '"' && str.back() == '"') {
-        return parseValue<T>(str);
-    }
-    
-    // Otherwise treat as numeric or other type
-    return parseValue<T>(str);
-}
-
-// Generic function to run test cases
-template <typename T>
-void run_test_case(int test_case_number, const function<void(const T&)>& solution_function) {
-    fs::path base_directory = fs::path(__FILE__).parent_path().parent_path();
-    fs::path file_path = base_directory / "test_cases" / ("input_" + to_string(test_case_number) + ".txt");
-
-    try {
-        ifstream file(file_path);
-        if (!file.is_open()) {
-            throw runtime_error("File not found at " + file_path.string());
+    // Join the reversed list into a single string with a single space
+    ostringstream oss;
+    for (size_t i = 0; i < words.size(); ++i) {
+        if (i != 0) {
+            oss << " ";
         }
-
-        string line;
-        vector<string> lines;
-        while (getline(file, line)) {
-            lines.push_back(line);
-        }
-
-        if (lines.empty()) {
-            throw runtime_error("Invalid input format");
-        }
-
-        // Parse input based on type T
-        T parsed_input = detectAndParseValue<T>(lines[0]);
-        solution_function(parsed_input);
-
-    } catch (const exception& e) {
-        cerr << "Error: " << e.what() << endl;
+        oss << words[i];
     }
+
+    return oss.str();
 }
 
-// -------------------- SOLUTION TEMPLATE --------------------
-// MODIFY THIS SECTION FOR YOUR SPECIFIC PROBLEM
+// Function to run the test case
+void runTestCase(int n, string (*func)(const string&)) {
+    string filePath = "../test_cases/input_" + to_string(n) + ".txt";
+    ifstream file(filePath);
 
-void solution(const vector<int>& args) {
-    // Example parsing different types of inputs
-    // Modify according to your problem requirements
-    
-    // For array input: [1,2,3]
-    if (!args.empty() && args[0][0] == '[') {
-        auto arr = parseArray<int>(args[0]);
-        
+    if (!file.is_open()) {
+        cerr << "Error: File not found at " << filePath << ". Check the file path and try again." << endl;
+        return;
     }
-    
-    // For string input: "hello"
-    if (args.size() >= 2 && args[1][0] == '"') {
-        string str = args[1].substr(1, args[1].length() - 2);
-    }
-    
-    // For integer input: 42
-    if (args.size() >= 3) {
-        int num = parseValue<int>(args[2]);
-    }
-    
-    // YOUR SOLUTION LOGIC GOES HERE
-    
-    
+
+    string line;
+    getline(file, line);
+    file.close();
+
+    string result = func(line);
+    cout << result << endl;
 }
 
 int main() {
-    // Run single test case
-    run_test_case<vector<int>>(1, solution);
-    
-   
+    // Example usage
+    // Provide the test case number and function name
+    runTestCase(1, reverseWords);
     return 0;
 }
