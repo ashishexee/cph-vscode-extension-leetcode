@@ -2,6 +2,27 @@
 
 ![LeetCode Helper]
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Extension Settings](#extension-settings)
+- [Known Issues](#known-issues)
+- [Release Notes](#release-notes)
+- [Contributing](#contributing)
+- [Code of Conduct](#code-of-conduct)
+- [FAQs](#faqs)
+- [Troubleshooting](#troubleshooting)
+- [License](#license)
+
+## Badges
+
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
+
 ## Overview
 
 LeetCode Helper is a Visual Studio Code extension designed to streamline the process of solving LeetCode problems. It provides a seamless interface to write, test, and debug your solutions directly within VS Code.
@@ -49,6 +70,39 @@ This extension contributes the following settings:
 
 - Initial release of LeetCode Helper.
 
+## Contributing
+
+We welcome contributions to improve this project. Please follow these guidelines:
+
+1. Fork the repository.
+2. Create a new branch for your feature or bugfix.
+3. Make your changes and commit them with clear and concise messages.
+4. Push your changes to your forked repository.
+5. Create a pull request to the main repository.
+
+## Code of Conduct
+
+We expect all contributors to adhere to our Code of Conduct. Please read it before contributing.
+
+## FAQs
+
+**Q: How do I fetch a LeetCode problem?**
+A: Use the command `LeetCode Helper: Fetch Problem` from the Command Palette.
+
+**Q: How do I run test cases?**
+A: Use the command `LeetCode Helper: Run Test Cases` from the Command Palette.
+
+**Q: What languages are supported?**
+A: Currently, Python and C++ are supported.
+
+## Troubleshooting
+
+If you encounter any issues, try the following steps:
+
+1. Ensure you have the latest version of the extension installed.
+2. Check the extension settings to ensure they are configured correctly.
+3. Restart VS Code.
+4. If the issue persists, please open an issue on the GitHub repository.
 
 ## License
 
