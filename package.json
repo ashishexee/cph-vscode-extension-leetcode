@@ -10,6 +10,7 @@
     "Other"
   ],
   "main": "./dist/extension.js",
+  "icon": "resources/leetcodeextension.png",
   "contributes": {
     "commands": [
       {
