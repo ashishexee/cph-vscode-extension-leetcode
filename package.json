@@ -14,7 +14,7 @@
     "commands": [
       {
         "command": "leetcode-cph-helper-by-ashish.fetchLeetCodeTestCases",
-        "title": "Fetch LeetCode Test Cases"
+        "title": "Fetch Test Cases"
       },
       {
         "command": "leetcode-cph-helper-by-ashish.runTestCases",
@@ -30,11 +30,43 @@
       },
       {
         "command": "leetcode-cph-helper-by-ashish.getIOFileDirectory",
-        "title": "Get IO File Directory"
+        "title": "Get I/O File Directory"
       },
       {
         "command": "leetcode-cph-helper-by-ashish.showLeetCodeProblemLinks",
         "title": "Show LeetCode Problem Links"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "leetcode-cph-helper-by-ashish.fetchLeetCodeTestCases",
+        "key": "ctrl+1",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "leetcode-cph-helper-by-ashish.runTestCases",
+        "key": "ctrl+5",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "leetcode-cph-helper-by-ashish.writeSolutionFile",
+        "key": "ctrl+4",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "leetcode-test-case-manager.getSolutionFileDirectory",
+        "key": "ctrl+3",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "leetcode-cph-helper-by-ashish.getIOFileDirectory",
+        "key": "ctrl+2",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "leetcode-cph-helper-by-ashish.showLeetCodeProblemLinks",
+        "key": "ctrl+6",
+        "when": "editorTextFocus"
       }
     ],
     "views": {

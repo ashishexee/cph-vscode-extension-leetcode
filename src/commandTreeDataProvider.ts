@@ -7,12 +7,12 @@ export class CommandTreeDataProvider implements vscode.TreeDataProvider<vscode.T
 
     // Mapping of command IDs to their display names, icons, and colors
     private extensionCommands: { [key: string]: { label: string, icon: string, color: string } } = {
-        'leetcode-cph-helper-by-ashish.fetchLeetCodeTestCases': { label: 'Fetch Test Cases', icon: 'cloud-download', color: 'charts.green' },
-        'leetcode-cph-helper-by-ashish.runTestCases': { label: 'Run Test Cases', icon: 'play-circle', color: 'charts.blue' },
-        'leetcode-cph-helper-by-ashish.writeSolutionFile': { label: 'Write Solution File', icon: 'file-code', color: 'charts.yellow' },
-        'leetcode-test-case-manager.getSolutionFileDirectory': { label: 'Get Solution File Directory', icon: 'folder', color: 'charts.orange' },
-        'leetcode-cph-helper-by-ashish.getIOFileDirectory': { label: 'Get I/O File Directory', icon: 'folder', color: 'charts.red' },
-        'leetcode-cph-helper-by-ashish.showLeetCodeProblemLinks': { label: 'Show LeetCode Problem Links', icon: 'link', color: 'charts.purple' }
+        'leetcode-cph-helper-by-ashish.fetchLeetCodeTestCases': { label: 'Fetch Test Cases(CTRL+1)', icon: 'cloud-download', color: 'charts.green' },
+        'leetcode-cph-helper-by-ashish.runTestCases': { label: 'Run Test Cases(CTRL+5)', icon: 'play-circle', color: 'charts.blue' },
+        'leetcode-cph-helper-by-ashish.writeSolutionFile': { label: 'Write Solution File(CTRL+4)', icon: 'file-code', color: 'charts.yellow' },
+        'leetcode-test-case-manager.getSolutionFileDirectory': { label: 'Get Solution File Directory(CTRL+3)', icon: 'folder', color: 'charts.orange' },
+        'leetcode-cph-helper-by-ashish.getIOFileDirectory': { label: 'Get I/O File Directory(CTRL+2)', icon: 'folder', color: 'charts.red' },
+        'leetcode-cph-helper-by-ashish.showLeetCodeProblemLinks': { label: 'Show LeetCode Problem Links(CTRL+6)', icon: 'link', color: 'charts.purple' }
     };
 
     // Returns a TreeItem representation of the given element
