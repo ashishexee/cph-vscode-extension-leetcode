@@ -1,6 +1,6 @@
 # LeetCode Helper Extension
 
-![LeetCode Helper](resources/leetcodeextension.png)
+<img src="resources/leetcodeextension.png" alt="LeetCode Extension" width="200"/>
 
 ## Table of Contents
 
@@ -116,4 +116,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Logging**: Enhanced logging for better debugging.
 - **Solution File Management**: Automatically generate and manage solution files.
 
-![Thanks for your time](resources/thanks.svg)
+![Thanks for your time](resources/thanks.png)
