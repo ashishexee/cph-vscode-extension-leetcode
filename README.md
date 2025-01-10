@@ -1,6 +1,6 @@
 # LeetCode Helper Extension
 
-![LeetCode Helper]
+![LeetCode Helper](resources/leetcodeextension.svg)
 
 ## Table of Contents
 
@@ -13,7 +13,6 @@
 - [Release Notes](#release-notes)
 - [Contributing](#contributing)
 - [Code of Conduct](#code-of-conduct)
-- [FAQs](#faqs)
 - [Troubleshooting](#troubleshooting)
 - [License](#license)
 
@@ -42,6 +41,8 @@ LeetCode Helper is a Visual Studio Code extension designed to streamline the pro
 - **Run Test Cases**: Execute your code against provided test cases and see the results instantly.
 - **Solution File Management**: Automatically generate and manage solution files.
 - **Error Handling**: Detailed error messages to help you debug your code.
+- **Feature to edit/add extra test cases**:User can add extra test cases for testing.
+- **Panel for running commands**:User can use the panel that is present on the left side to run command instead of using command panel(also added key bindings to all commands).
 
 ![Features]
 
@@ -54,10 +55,10 @@ LeetCode Helper is a Visual Studio Code extension designed to streamline the pro
 
 ## Usage
 
-1. Open the Command Palette (`Ctrl+Shift+P`).
-2. Type `LeetCode Helper: Fetch Problem` to fetch a new problem.
-3. Write your solution in the generated file.
-4. Run your test cases using `LeetCode Helper: Run Test Cases`.
+1. Open the Command Palette (`Ctrl+Shift+P`) or Directly access from left side panel
+2. Type `LeetCode Helper: Fetch Problem` to fetch a new problem(add extra test cases too if you want too).
+3. Write your solution in the generated file(in both python and c++).
+4. Run your test cases using `LeetCode Helper: Run Test Cases`. / or use CTRL+5.
 
 ![Usage]
 
@@ -71,7 +72,9 @@ This extension contributes the following settings:
 ## Known Issues
 
 - Some edge cases might not be handled correctly.
+- for testing C++ you may need to parse the variables from input files manually depending on the data type inside the run_test_case function
 - Limited support for languages other than Python and C++.
+- All test are not checked in one go you need to check for each test case individually(please refer to this page for better understanding - https://stackoverflow.com/questions/9551014/reading-parsing-text-file-input-c) THANKS
 
 ## Release Notes
 
@@ -93,17 +96,6 @@ We welcome contributions to improve this project. Please follow these guidelines
 
 We expect all contributors to adhere to our Code of Conduct. Please read it before contributing.
 
-## FAQs
-
-**Q: How do I fetch a LeetCode problem?**
-A: Use the command `LeetCode Helper: Fetch Problem` from the Command Palette.
-
-**Q: How do I run test cases?**
-A: Use the command `LeetCode Helper: Run Test Cases` from the Command Palette.
-
-**Q: What languages are supported?**
-A: Currently, Python and C++ are supported.
-
 ## Troubleshooting
 
 If you encounter any issues, try the following steps:
@@ -124,4 +116,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Logging**: Enhanced logging for better debugging.
 - **Solution File Management**: Automatically generate and manage solution files.
 
-![Footer]
+![Thanks for your time](resources/thanks.png)
