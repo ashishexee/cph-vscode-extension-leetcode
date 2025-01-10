@@ -1,39 +1,34 @@
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <algorithm>
-#include <string>
+#include <bits/stdc++.h>
 using namespace std;
 
-// Function to reverse words in a string
-string reverseWords(const string& s) {
+string reverseWords(const string &s) {
     istringstream iss(s);
     vector<string> words;
     string word;
 
-    // Split the input string into words
+    // Split the string into words
     while (iss >> word) {
         words.push_back(word);
     }
 
-    // Reverse the list of words
+    // Reverse the order of words
     reverse(words.begin(), words.end());
 
-    // Join the reversed list into a single string with a single space
-    ostringstream oss;
-    for (size_t i = 0; i < words.size(); ++i) {
-        if (i != 0) {
-            oss << " ";
-        }
-        oss << words[i];
+    // Join the words back into a single string
+    string reversed;
+    for (const auto &w : words) {
+        reversed += w + " ";
     }
 
-    return oss.str();
-}
+    // Remove the trailing space
+    if (!reversed.empty()) {
+        reversed.pop_back();
+    }
 
+    return reversed;
+}
 // Function to run the test case
-void runTestCase(int n, string (*func)(const string&)) {
+void runTestCase(int n) {
     string filePath = "../test_cases/input_" + to_string(n) + ".txt";
     ifstream file(filePath);
 
@@ -42,17 +37,19 @@ void runTestCase(int n, string (*func)(const string&)) {
         return;
     }
 
-    string line;
-    getline(file, line);
-    file.close();
-
-    string result = func(line);
+// if your input files has vector/array uncomment the below code
+    // Read the array from the file
+string ans;
+getline(file,ans);
+string result = reverseWords(ans);
+    // Print the result
     cout << result << endl;
+    file.close();
 }
 
 int main() {
     // Example usage
-    // Provide the test case number and function name
-    runTestCase(1, reverseWords);
+    runTestCase(1); // Adjust the number as needed for your actual test case
     return 0;
 }
+
