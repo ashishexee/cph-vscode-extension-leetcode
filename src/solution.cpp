@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <filesystem>
 
-namespace fs = std::experimental::filesystem;
+namespace fs = std::filesystem;
 
 // Function to reverse words in a string
 std::string reverse_words(const std::string& s) {
@@ -27,33 +27,28 @@ std::string reverse_words(const std::string& s) {
     return oss.str();
 }
 
-// Function to run a test case
-template <typename F>
-void run_test_case(int n, F solution_function) {
-    fs::path base_dir = fs::path(__FILE__).parent_path().parent_path();
-    fs::path input_path = base_dir / "test_cases" / ("input_" + std::to_string(n) + ".txt");
+// Function to run the test case
+void runTestCase(int n) {
+    std::string filePath = "../test_cases/input_" + std::to_string(n) + ".txt";
+    std::ifstream file(filePath);
 
-    if (!fs::exists(input_path)) {
-        std::cerr << "Error: File not found at " << input_path << ". Check the file path and try again." << std::endl;
+    if (!file.is_open()) {
+        std::cerr << "Error: File not found at " << filePath << ". Check the file path and try again." << std::endl;
         return;
     }
 
-    try {
-        std::ifstream input_file(input_path);
-        if (!input_file.is_open()) {
-            throw std::runtime_error("Could not open input file.");
-        }
-        std::string line;
-        std::getline(input_file, line);
-
-        solution_function(line);
-
-    } catch (const std::exception& e) {
-        std::cerr << "Error during test case execution: " << e.what() << std::endl;
+    std::string line;
+    if (std::getline(file, line)) {
+        std::string result = reverse_words(line);
+        std::cout << result << std::endl;
     }
+
+    file.close();
 }
 
 int main() {
-    run_test_case(2, reverse_words);
+    // Example usage
+    // Provide the test case number
+    runTestCase(1); // Adjust the number as needed for your actual test case
     return 0;
 }
