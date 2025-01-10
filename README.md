@@ -2,7 +2,7 @@
 
 <div style="display: flex; align-items: center;">
     <img src="resources/leetcodeextension.png" alt="LeetCode Extension" width="200"/>
-    <img src="resources/screenshot.png" alt="Screenshot" width="200"/>
+    <img src="resources/screenshot01.png" alt="Screenshot" width="200"/>
 </div>
 
 ## Table of Contents
