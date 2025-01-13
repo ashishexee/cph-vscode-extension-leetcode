@@ -255,15 +255,16 @@ int main() {
                                 results.push(expectedOutput
                                     ? `${resultMessage}Expected Output: ${normalizedExpectedOutput}\nActual Output: ${normalizedResult}`
                                     : resultMessage);
+
+                                console.log(results.join('\n\n'));
+                                vscode.window.showInformationMessage(`Test Case Summary:\n\n${results.join('\n\n')}`, { modal: true });
                             } catch (innerError) {
                                 const errorMessage = innerError instanceof Error ? innerError.message : String(innerError);
                                 const actualOutput = 'N/A';
                                 results.push(`❌😭 Test Case ${testCaseNumber}: Failed! 😭 \nError: ${errorMessage}\nActual Output: ${actualOutput}`);
+                                console.log(results.join('\n\n'));
+                                vscode.window.showInformationMessage(`Test Case Summary:\n\n${results.join('\n\n')}`, { modal: true });
                             }
-
-                            const summary = results.join('\n\n');
-                            vscode.window.showInformationMessage(`Test Case Summary:\n\n${summary}`, { modal: true });
-
                         } catch (error) {
                             vscode.window.showErrorMessage(`Error running test case: ${String(error)}`);
                         }

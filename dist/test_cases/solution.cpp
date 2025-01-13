@@ -1,32 +1,33 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <algorithm>
+#include <vector>
+
 using namespace std;
 
-string reverseWords(const string &s) {
+string reverseWords(string s) {
+    // Remove extra quotes from the input string
+    s.erase(remove(s.begin(), s.end(), '"'), s.end());
+
     istringstream iss(s);
     vector<string> words;
     string word;
-
-    // Split the string into words
     while (iss >> word) {
         words.push_back(word);
     }
-
-    // Reverse the order of words
     reverse(words.begin(), words.end());
-
-    // Join the words back into a single string
-    string reversed;
-    for (const auto &w : words) {
-        reversed += w + " ";
+    string result;
+    for (size_t i = 0; i < words.size(); ++i) {
+        result += words[i];
+        if (i < words.size() - 1) {
+            result += " ";
+        }
     }
-
-    // Remove the trailing space
-    if (!reversed.empty()) {
-        reversed.pop_back();
-    }
-
-    return reversed;
+    return result;
 }
+
 // Function to run the test case
 void runTestCase(int n) {
     string filePath = "../test_cases/input_" + to_string(n) + ".txt";
@@ -37,11 +38,10 @@ void runTestCase(int n) {
         return;
     }
 
-// if your input files has vector/array uncomment the below code
     // Read the array from the file
-string ans;
-getline(file,ans);
-string result = reverseWords(ans);
+    string ans;
+    getline(file, ans);
+    string result = reverseWords(ans);
     // Print the result
     cout << result << endl;
     file.close();
@@ -49,7 +49,7 @@ string result = reverseWords(ans);
 
 int main() {
     // Example usage
-    runTestCase(1); // Adjust the number as needed for your actual test case
+    runTestCase(3); // Adjust the number as needed for your actual test case
     return 0;
 }
 

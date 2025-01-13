@@ -2,6 +2,7 @@ import { exec, ExecOptions } from 'child_process';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as readline from 'readline';
+import * as vscode from 'vscode';
 
 // Function to normalize output by removing spaces and trimming
 function normalizeOutput(output: string): string {
@@ -164,8 +165,10 @@ async function main() {
                     : `❌ Test Case ${testCaseIndex}: Failed!\n`;
 
                 console.log(`${resultMessage}Expected Output: ${expectedOutput}\nActual Output: ${result.trim()}`);
+                vscode.window.showInformationMessage(`${resultMessage}Expected Output: ${expectedOutput}\nActual Output: ${result.trim()}`, { modal: true });
             } else {
                 console.log(`Output for Test Case ${testCaseIndex}:\n${result.trim()}`);
+                vscode.window.showInformationMessage(`Output for Test Case ${testCaseIndex}:\n${result.trim()}`, { modal: true });
             }
         } catch (error) {
             console.error(error);
