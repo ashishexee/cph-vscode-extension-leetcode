@@ -21,17 +21,14 @@
         "command": "leetcode-cph-helper-by-ashish.runTestCases",
         "title": "Run Test Cases"
       },
-      {
-        "command": "leetcode-cph-helper-by-ashish.writeSolutionFile",
-        "title": "Write Solution File"
-      },
+    
       {
         "command": "leetcode-test-case-manager.getSolutionFileDirectory",
         "title": "Get Solution File Directory"
       },
       {
         "command": "leetcode-cph-helper-by-ashish.getIOFileDirectory",
-        "title": "Get I/O File Directory"
+        "title": "Get I/O & Solution File Directory"
       },
       {
         "command": "leetcode-cph-helper-by-ashish.showLeetCodeProblemLinks",

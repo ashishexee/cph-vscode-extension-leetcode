@@ -1,4 +1,4 @@
-import * as puppeteer from 'puppeteer';
+import * as puppeteer from 'puppeteer'; // web scrapper
 import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
@@ -12,7 +12,7 @@ const RETRY_DELAY = 3000; // 0.1 seconds
 const MAX_RETRIES = 5; // Maximum retry attempts
 
 export async function fetchTestCases(url: string): Promise<void> {
-    const browser = await puppeteer.launch({ headless: false }); // Run in visible mode for debugging
+    const browser = await puppeteer.launch({ headless: false }); //browser page is visible
     const page = await browser.newPage();
 
     let attempts = 0;

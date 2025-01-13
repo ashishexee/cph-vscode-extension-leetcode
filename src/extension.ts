@@ -57,7 +57,7 @@ export function activate(context: vscode.ExtensionContext) {
             try {
                 // Copy the directory path to the clipboard
                 await vscode.env.clipboard.writeText(baseDirectory);
-                vscode.window.showInformationMessage(`I/O text file directory path copied to clipboard: ${baseDirectory}`);
+                vscode.window.showInformationMessage(`I/O & Solution file directory path copied to clipboard: ${baseDirectory}`);
             } catch (error) {
                 vscode.window.showErrorMessage(`Error: ${error}`);
             }
@@ -65,18 +65,7 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
     // Command: Get Solution File Directory
-    const getSolutionFileDirectoryCommand = vscode.commands.registerCommand(
-        'leetcode-test-case-manager.getSolutionFileDirectory',
-        async () => {
-            try {
-                const solutionDir = path.join(baseDirectory, 'dist', 'test_cases');
-                await vscode.env.clipboard.writeText(solutionDir);
-                vscode.window.showInformationMessage(`Solution directory path copied to clipboard: ${solutionDir}`);
-            } catch (error) {
-                vscode.window.showErrorMessage(`Error copying solution directory path: ${error}`);
-            }
-        }
-    );
+    
 
     // Command: Write Solution File
     const writeSolutionFileCommand = vscode.commands.registerCommand(
@@ -288,7 +277,7 @@ int main() {
     );
 
     // Register commands in context so that commandTreeDataProvider can access them
-    context.subscriptions.push(fetchCommand,showLeetCodeProblemLinksCommand, getIOFileDirectoryCommand, getSolutionFileDirectoryCommand, writeSolutionFileCommand, runCommand);
+    context.subscriptions.push(fetchCommand,showLeetCodeProblemLinksCommand, getIOFileDirectoryCommand, writeSolutionFileCommand, runCommand);
     const commandTreeDataProvider = new CommandTreeDataProvider();
     vscode.window.registerTreeDataProvider('leetcodeHelperCommands', commandTreeDataProvider);
 
