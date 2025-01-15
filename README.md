@@ -1,8 +1,7 @@
 # LeetCode Helper Extension
 
 <div style="display: flex; align-items: center;">
-    <img png="resources/leetcodeextension.png" alt="LeetCode Extension" width="200"/>
-    <img png="resources/screenshot01.png" alt="Screenshot" width="200"/>
+    <img svg="resources/leetcodeextension.png" alt="LeetCode Extension" width="100"/>
 </div>
 
 ## Table of Contents
