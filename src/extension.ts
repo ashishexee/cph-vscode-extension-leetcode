@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import { fetchTestCases } from './fetchTestCases';
 import { executeCode } from './executeCode';
 import { CommandTreeDataProvider } from './commandTreeDataProvider';
+import { fetchTestCases } from './fetchTestCases';
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('LeetCode Helper Extension Activated!');
@@ -50,7 +50,7 @@ export function activate(context: vscode.ExtensionContext) {
         }
     );
 
-    // Command: Get IO File Directory
+    // Command: Get I/O File Directory
     const getIOFileDirectoryCommand = vscode.commands.registerCommand(
         'leetcode-cph-helper-by-ashish.getIOFileDirectory',
         async () => {
@@ -63,9 +63,6 @@ export function activate(context: vscode.ExtensionContext) {
             }
         }
     );
-
-    // Command: Get Solution File Directory
-    
 
     // Command: Write Solution File
     const writeSolutionFileCommand = vscode.commands.registerCommand(
@@ -105,23 +102,38 @@ export function activate(context: vscode.ExtensionContext) {
                 }
 
                 const boilerplate = language === 'python'
-                    ? `import os; run_test_case=lambda n,f: print((lambda p: (lambda a: f(*a))(eval(l.strip()) for l in open(p).read().strip().splitlines()) if os.path.isfile(p) else f"Error: File not found at {p}. Check the file path and try again.")((lambda d: os.path.join(d, 'test_cases', f"input_{n}.txt"))(os.path.dirname(os.path.dirname(file)))))
-#WRITE YOUR CODE LOGIC HERE
+                    ? `import os
 
-#---------------------------------------------------------------------------------------
+# Function to run test cases
+run_test_case = lambda n, f: (
+    print(
+        (
+            lambda p: (
+                lambda a: f(*a)
+            )(eval(l.strip()) for l in open(p).read().strip().splitlines()) 
+            if os.path.isfile(p) else f"Error: File not found at {p}. Check the file path and try again."
+        )(
+            (lambda d: os.path.join(d, 'test_cases', f"input_{n}.txt"))(
+                os.path.dirname(os.path.dirname(__file__))
+            )
+        )
+    )
+   
+)
+
+
 # Example usage
-# Provide the test case number and function name
-#run_test_case(TEST_CASE_NUMBER, FUNCTION_NAME);
-run_test_case()`
-
-
+# Uncomment the below line for testing
+# run_test_cases(TEST_CASE_NUMBER,FUNCTION WHERE YOUR CODE LOGIC IS PRESENT)
+run_test_case()
+`
                     : `#include <bits/stdc++.h>
 using namespace std;
 
 //write the code logic here 
 
 
-// Function to run the tes\ case
+// Function to run the test case
 void runTestCase(int n) {
     string filePath = "../test_cases/input_" + to_string(n) + ".txt";
     ifstream file(filePath);
@@ -131,24 +143,28 @@ void runTestCase(int n) {
         return;
     }
 
-// if your input files has vector/array uncomment the below code
-    // Read the array from the file
+    // Read the array from the file (Uncomment if needed)
 
-    // Call the function and print the result(pass all the varbles that you have read from the file)
-    //<data type> result = <function_name>(<variables>);
+    // Call the function and print the result (pass all the variables)
+    // <data type> result = <function_name>(<variables>);
+    /* for example
+    string ans;
+    getline(file, ans);
+    string result = reverseWords(ans);
+    // Print the result
+    cout << result << endl;
+    file.close();
+    */
     
     cout << result << endl;
 }
 
 int main() {
-    // Example usage
-    runTestCase(); // Adjust the number as needed for your actual test case
+    // example -> runTestCases(ENTER_THE_TESTCASE_YOU_WANT_TO_TEST);
+    runTestCase(); 
     return 0;
 }
-
 `;
-
-
 
                 fs.writeFileSync(filePath, boilerplate, 'utf-8');
 
@@ -264,8 +280,6 @@ int main() {
             }
         }
     );
-
-    // Command: Show LeetCode Problem Links
     const showLeetCodeProblemLinksCommand = vscode.commands.registerCommand(
         'leetcode-cph-helper-by-ashish.showLeetCodeProblemLinks',
         async () => {
@@ -277,7 +291,7 @@ int main() {
     );
 
     // Register commands in context so that commandTreeDataProvider can access them
-    context.subscriptions.push(fetchCommand,showLeetCodeProblemLinksCommand, getIOFileDirectoryCommand, writeSolutionFileCommand, runCommand);
+    context.subscriptions.push(fetchCommand, showLeetCodeProblemLinksCommand,runCommand, writeSolutionFileCommand, getIOFileDirectoryCommand);
     const commandTreeDataProvider = new CommandTreeDataProvider();
     vscode.window.registerTreeDataProvider('leetcodeHelperCommands', commandTreeDataProvider);
 

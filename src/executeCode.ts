@@ -63,7 +63,7 @@ export async function executeCode(fileName: string, language: string, testCaseIn
         let command: string;
         if (language === 'python') {
             const env = { ...process.env, LEETCODE_INPUT_FILE: resolvedInputPath };
-            command = `python3 "${resolvedFilePath}"`;   //use python3 for proper functioning
+            command = `python3 "${resolvedFilePath}"`;
             options.env = env;
         } else if (language === 'cpp') {
             const outputFileName = path.basename(resolvedFilePath, '.cpp');
@@ -111,16 +111,24 @@ export async function executeCode(fileName: string, language: string, testCaseIn
 }
 
 // Helper function to compare outputs
-function compareOutputs(expectedOutputPath: string, actualOutput: string, testCaseIndex: number, resolve: Function, reject: Function) {
+function compareOutputs(
+    expectedOutputPath: string,
+    actualOutput: string,
+    testCaseIndex: number,
+    resolve: Function,
+    reject: Function
+) {
     const expectedOutput = fs.readFileSync(expectedOutputPath, 'utf-8').trim();
     const normalizedExpected = normalizeOutput(expectedOutput);
     const normalizedActual = normalizeOutput(actualOutput.trim());
 
     if (normalizedExpected === normalizedActual) {
-        console.log(`Test case ${testCaseIndex} passed!`);
+        console.log(`✅ Test case ${testCaseIndex} passed!`);
         resolve(actualOutput.trim());
     } else {
-        console.error(`Test case ${testCaseIndex} failed. Expected: ${expectedOutput}, Got: ${actualOutput.trim()}`);
+        console.error(`❌ Test case ${testCaseIndex} failed.`);
+        console.error(`Expected Output: "${expectedOutput}"`);
+        console.error(`Actual Output: "${actualOutput.trim()}"`);
         reject(`Test case ${testCaseIndex} failed.`);
     }
 }
@@ -144,31 +152,31 @@ async function main() {
         console.log(`\nRunning Test Case ${testCaseIndex}...`);
         try {
             const result = await executeCode(fileName, language, testCaseIndex);
+            console.log(`Raw result for Test Case ${testCaseIndex}:`, result);
 
             // Read the expected output
             const expectedOutputPath = path.join(testCasesDir, `output_${testCaseIndex}.txt`);
             if (fs.existsSync(expectedOutputPath)) {
                 let expectedOutput = fs.readFileSync(expectedOutputPath, 'utf-8').trim();
 
-                // Remove quotes from the expected output if it is a string
                 if (expectedOutput.startsWith('"') && expectedOutput.endsWith('"')) {
                     expectedOutput = expectedOutput.slice(1, -1);
                 }
 
                 // Normalize the outputs for comparison
                 const normalize = (str: string) => str.replace(/\s+/g, '').toLowerCase();
-                const normalizedResult = normalize(result);
+                const normalizedResult = result ? normalize(result) : 'N/A';
                 const normalizedExpectedOutput = normalize(expectedOutput);
 
                 const resultMessage = normalizedResult === normalizedExpectedOutput
-                    ? `✅ Test Case ${testCaseIndex}: Passed!\n`
-                    : `❌ Test Case ${testCaseIndex}: Failed!\n`;
+                    ? `✅ Test Case ${testCaseIndex}: Passed!\nExpected Output: ${expectedOutput}\nActual Output: ${result ? result.trim() : 'N/A'}`
+                    : `❌ Test Case ${testCaseIndex}: Failed!\nExpected Output: ${expectedOutput}\nActual Output: ${result ? result.trim() : 'N/A'}`;
 
-                console.log(`${resultMessage}Expected Output: ${expectedOutput}\nActual Output: ${result.trim()}`);
-                vscode.window.showInformationMessage(`${resultMessage}Expected Output: ${expectedOutput}\nActual Output: ${result.trim()}`, { modal: true });
+                console.log(resultMessage);
+                vscode.window.showInformationMessage(resultMessage, { modal: true });
             } else {
-                console.log(`Output for Test Case ${testCaseIndex}:\n${result.trim()}`);
-                vscode.window.showInformationMessage(`Output for Test Case ${testCaseIndex}:\n${result.trim()}`, { modal: true });
+                console.log(`Output for Test Case ${testCaseIndex}:\nExpected Output: ${expectedOutputPath}\nActual Output: ${result ? result.trim() : 'N/A'}`);
+                vscode.window.showInformationMessage(`Output for Test Case ${testCaseIndex}:\nExpected Output: ${expectedOutputPath}\nActual Output: ${result ? result.trim() : 'N/A'}`, { modal: true });
             }
         } catch (error) {
             console.error(error);
