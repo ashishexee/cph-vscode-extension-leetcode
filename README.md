@@ -1,8 +1,8 @@
 # LeetCode Helper Extension
 
 <div style="display: flex; align-items: center;">
-    <img src="resources/leetcodeextension.png" alt="LeetCode Extension" width="200"/>
-    <img src="resources/screenshot01.png" alt="Screenshot" width="200"/>
+    <img png="resources/leetcodeextension.png" alt="LeetCode Extension" width="200"/>
+    <img png="resources/screenshot01.png" alt="Screenshot" width="200"/>
 </div>
 
 ## Table of Contents
@@ -43,11 +43,10 @@ LeetCode Helper is a Visual Studio Code extension designed to streamline the pro
 - **Fetch LeetCode Problems**: Quickly fetch problem statements and test cases.
 - **Run Test Cases**: Execute your code against provided test cases and see the results instantly.
 - **Solution File Management**: Automatically generate and manage solution files.
-- **Error Handling**: Detailed error messages to help you debug your code.
-- **Feature to edit/add extra test cases**:User can add extra test cases for testing.
+- **Error Handling**: Detailed error messages to help you debug your code with Expected and Actual results.
 - **Panel for running commands**:User can use the panel that is present on the left side to run command instead of using command panel(also added key bindings to all commands).
+- **Edit Testcases or add more test cases**: User can either edit/add/delete testcases by going to the directory where the testcases file are saved by using "Get I/O File Directory".
 
-![Features]
 
 ## Installation
 
@@ -63,7 +62,6 @@ LeetCode Helper is a Visual Studio Code extension designed to streamline the pro
 3. Write your solution in the generated file(in both python and c++).
 4. Run your test cases using `LeetCode Helper: Run Test Cases`. / or use CTRL+5.
 
-![Usage]
 
 ## Extension Settings
 
@@ -75,9 +73,9 @@ This extension contributes the following settings:
 ## Known Issues
 
 - Some edge cases might not be handled correctly.
-- for testing C++ you may need to parse the variables from input files manually depending on the data type inside the run_test_case function
-- Limited support for languages (Python and C++)
-- All test are not checked in one go you need to check for each test case individually(please refer to this page for better understanding - https://stackoverflow.com/questions/9551014/reading-parsing-text-file-input-c) THANKS
+- for testing C++ you may need to parse the variables from input files manually depending on the data type inside the run_test_case function (please refer to this page for better understanding - https://stackoverflow.com/questions/9551014/reading-parsing-text-file-input-c) 
+- Limited support for languages other than Python and C++.
+- All test are not checked in one go you need to check for each test case individually
 
 ## Release Notes
 

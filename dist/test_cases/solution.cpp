@@ -49,7 +49,7 @@ void runTestCase(int n) {
 
 int main() {
     // Example usage
-    runTestCase(3); // Adjust the number as needed for your actual test case
+    runTestCase(1); // Adjust the number as needed for your actual test case
     return 0;
 }
 
