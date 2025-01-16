@@ -69,7 +69,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Modifications #4
 
 ### Fixed
-- updated the logic for fetchTestCases as some leetcode problem page has input and output under <pre> class so we have to use <pre> as the selector for puppeteer on the other hand some leetcode problems(old problems) has input and output under div.example-block under <strong> tags so I have updated the logic of puppeteer to fetch test cases for all the problems in leetcode no matter new or old
+- updated the logic for fetchTestCases as some leetcode problem page has input and output under pre class so we have to use pre as the selector for puppeteer on the other hand some leetcode problems(old problems) has input and output under div.example-block under pre tags so I have updated the logic of puppeteer to fetch test cases for all the problems in leetcode no matter new or old
 (this thing can change anytime if any time leetcode decided to change the class under which they write input and output)
 
 ### Added 

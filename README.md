@@ -1,9 +1,5 @@
 # LeetCode Helper Extension
 
-<div style="display: flex; align-items: center;">
-    <img svg="resources/leetcodeextension.png" alt="LeetCode Extension" width="100"/>
-</div>
-
 ## Table of Contents
 
 - [Overview](#overview)

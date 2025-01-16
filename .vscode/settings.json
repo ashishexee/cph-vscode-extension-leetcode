@@ -104,5 +104,6 @@
         "variant": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled",
-    "cmake.sourceDirectory": "/home/ashishexe/Documents/GitHub/cph-vscode-extension-leetcode/node_modules/bare-fs"
+    "cmake.sourceDirectory": "/home/ashishexe/Documents/GitHub/cph-vscode-extension-leetcode/node_modules/bare-fs",
+    "debug.console": "integratedTerminal"
 }

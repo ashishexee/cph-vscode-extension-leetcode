@@ -1,7 +1,12 @@
 {
   "name": "leetcodehelperbyashish",
   "displayName": "LeetCode Helper by Ashish",
+  "publisher": "leetcodehelper",
   "description": "The LeetCode Helper Extension assists developers by fetching test cases and running code in Python or C++ directly within VS Code.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ashishexe/cph-vscode-extension-leetcode"
+  },
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.96.0"

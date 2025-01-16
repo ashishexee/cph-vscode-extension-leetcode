@@ -26,4 +26,4 @@ def reverse_words(s: str) -> str:
 # Example usage
 # Provide the test case number and function name
 # Uncomment the below line for testing
-run_test_case(1, reverse_words)
+run_test_case(2, reverse_words)
