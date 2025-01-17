@@ -1,5 +1,5 @@
 # LeetCode Helper Extension
-
+demonstration video explaining all the features of the extension and how to use them - https://www.youtube.com/watch?v=KXRde3BNKEU
 ## Table of Contents
 
 - [Overview](#overview)
