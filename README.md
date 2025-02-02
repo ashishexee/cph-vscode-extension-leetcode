@@ -69,9 +69,9 @@ This extension contributes the following settings:
 
 - Some edge cases might not be handled correctly.
 - for testing C++ you may need to parse the variables from input files manually depending on the data type inside the run_test_case function (please refer to this page for better understanding - https://stackoverflow.com/questions/9551014/reading-parsing-text-file-input-c) 
-- Limited support for languages other than Python and C++.
+- Limited support for languages(only python and cpp)
 - All test are not checked in one go you need to check for each test case individually
-
+- a clear falied messege might not show if your test case fails
 ## Release Notes
 
 ### 1.0.0
