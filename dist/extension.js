@@ -281649,10 +281649,11 @@ function compareOutputs(expectedOutputPath, actualOutput, testCaseIndex, resolve
     console.log(`\u2705 Test case ${testCaseIndex} passed!`);
     resolve6(actualOutput.trim());
   } else {
-    console.error(`\u274C Test case ${testCaseIndex} failed.`);
-    console.error(`Expected Output: "${expectedOutput}"`);
-    console.error(`Actual Output: "${actualOutput.trim()}"`);
-    reject(`Test case ${testCaseIndex} failed.`);
+    const detailedError = `\u274C Test case ${testCaseIndex} failed.
+Expected Output: "${expectedOutput}"
+Actual Output: "${actualOutput.trim()}"`;
+    console.error(detailedError);
+    reject(detailedError);
   }
 }
 async function main() {
@@ -281697,6 +281698,10 @@ Actual Output: ${result ? result.trim() : "N/A"}`, { modal: true });
       }
     } catch (error) {
       console.error(error);
+      if (typeof vscode !== "undefined" && vscode.window) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        vscode.window.showErrorMessage(`Test Case ${testCaseIndex} Error: ${errorMessage}`);
+      }
     }
   }
 }
@@ -297975,10 +297980,14 @@ Actual Output: ${normalizedResult}` : resultMessage);
 ${results.join("\n\n")}`, { modal: true });
               } catch (innerError) {
                 const errorMessage = innerError instanceof Error ? innerError.message : String(innerError);
-                const actualOutput = "N/A";
-                results.push(`\u274C\u{1F62D} Test Case ${testCaseNumber}: Failed! \u{1F62D} 
+                if (errorMessage.includes("Expected Output:") && errorMessage.includes("Actual Output:")) {
+                  results.push(`\u274C\u{1F62D} Test Case ${testCaseNumber}: Failed! \u{1F62D}
+${errorMessage}`);
+                } else {
+                  results.push(`\u274C\u{1F62D} Test Case ${testCaseNumber}: Failed! \u{1F62D}
 Error: ${errorMessage}
-Actual Output: ${actualOutput}`);
+Actual Output: N/A`);
+                }
                 console.log(results.join("\n\n"));
                 vscode4.window.showInformationMessage(`Test Case Summary:
 
