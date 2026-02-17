@@ -265,8 +265,15 @@ int main() {
                                 vscode.window.showInformationMessage(`Test Case Summary:\n\n${results.join('\n\n')}`, { modal: true });
                             } catch (innerError) {
                                 const errorMessage = innerError instanceof Error ? innerError.message : String(innerError);
-                                const actualOutput = 'N/A';
-                                results.push(`❌😭 Test Case ${testCaseNumber}: Failed! 😭 \nError: ${errorMessage}\nActual Output: ${actualOutput}`);
+                                
+                                // Check if the error message contains detailed comparison info
+                                if (errorMessage.includes('Expected Output:') && errorMessage.includes('Actual Output:')) {
+                                    // Use the detailed error message as-is since it already contains expected vs actual
+                                    results.push(`❌😭 Test Case ${testCaseNumber}: Failed! 😭\n${errorMessage}`);
+                                } else {
+                                    // Fallback for other types of errors (compilation, runtime, etc.)
+                                    results.push(`❌😭 Test Case ${testCaseNumber}: Failed! 😭\nError: ${errorMessage}\nActual Output: N/A`);
+                                }
                                 console.log(results.join('\n\n'));
                                 vscode.window.showInformationMessage(`Test Case Summary:\n\n${results.join('\n\n')}`, { modal: true });
                             }

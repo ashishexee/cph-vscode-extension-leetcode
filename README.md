@@ -71,7 +71,6 @@ This extension contributes the following settings:
 - for testing C++ you may need to parse the variables from input files manually depending on the data type inside the run_test_case function (please refer to this page for better understanding - https://stackoverflow.com/questions/9551014/reading-parsing-text-file-input-c) 
 - Limited support for languages(only python and cpp)
 - All test are not checked in one go you need to check for each test case individually
-- a clear falied messege might not show if your test case fails
 ## Release Notes
 
 ### 1.0.0
@@ -108,6 +107,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Changes Made
 
 - **Error Handling**: Improved error handling in `extension.ts` and `executeCode.ts` to capture actual output even when test cases fail.
+- **Clear Failure Messages**: Enhanced test case failure messages to show detailed expected vs actual output comparison for better debugging.
 - **Output Normalization**: Added normalization for output comparison.
 - **Logging**: Enhanced logging for better debugging.
 - **Solution File Management**: Automatically generate and manage solution files.

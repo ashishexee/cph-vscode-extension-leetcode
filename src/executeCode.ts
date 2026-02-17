@@ -126,10 +126,9 @@ function compareOutputs(
         console.log(`✅ Test case ${testCaseIndex} passed!`);
         resolve(actualOutput.trim());
     } else {
-        console.error(`❌ Test case ${testCaseIndex} failed.`);
-        console.error(`Expected Output: "${expectedOutput}"`);
-        console.error(`Actual Output: "${actualOutput.trim()}"`);
-        reject(`Test case ${testCaseIndex} failed.`);
+        const detailedError = `❌ Test case ${testCaseIndex} failed.\nExpected Output: "${expectedOutput}"\nActual Output: "${actualOutput.trim()}"`;
+        console.error(detailedError);
+        reject(detailedError);
     }
 }
 
@@ -180,6 +179,11 @@ async function main() {
             }
         } catch (error) {
             console.error(error);
+            // Show user-friendly error in VS Code if available
+            if (typeof vscode !== 'undefined' && vscode.window) {
+                const errorMessage = error instanceof Error ? error.message : String(error);
+                vscode.window.showErrorMessage(`Test Case ${testCaseIndex} Error: ${errorMessage}`);
+            }
         }
     }
 }
